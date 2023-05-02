@@ -1,0 +1,23 @@
+# This is an aggregate workflow which calls other workflows, as required.
+# Calling other jobs in this way allows for easier visualization of the workflows and their dependencies.
+name: PR-Validation
+
+on:
+  pull_request:
+
+jobs:
+  ci-javascript:
+    uses: ./.github/workflows/ci-js.yml
+    if: !startsWith(github.event.pull_request.title, 'docs:')
+  CodeQL:
+    uses: ./.github/workflows/codeql.yml
+    if: !startsWith(github.event.pull_request.title, 'docs:')
+  dependency-review:
+    uses: ./.github/workflows/dependency-review.yml
+    if: !startsWith(github.event.pull_request.title, 'docs:')
+  build-docker:
+    uses: ./.github/workflows/docker.yml
+    needs:
+      - ci-javascript
+      - CodeQL
+      - dependency-review
