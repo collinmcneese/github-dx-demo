@@ -1,7 +1,7 @@
 // db.js
 // Export database connection using sequelize
 
-const Sequelize = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 // Create connection to sqlite db
 const db = new Sequelize({

@@ -109,6 +109,7 @@ router.post('/db/users', async(req, res) => {
 // Define a route to fetch a user from the database by name or ID
 router.get('/db/users', async(req, res) => {
   // Extract the name and ID from the request query parameters
+  console.log(req.query);
   let { name, id } = req.query;
 
   // If the name is provided, fetch the user by name
@@ -116,9 +117,9 @@ router.get('/db/users', async(req, res) => {
     // Fetch the user from the database by name
     let query = "SELECT * FROM users WHERE name = '" + name + "'";
 
-    let user = await db.query(query,
+    let user = await db.db.query(query,
       {
-        type: db.QueryTypes.SELECT,
+        type: db.user.SELECT,
       });
 
     // If no user is found, send a 404 error response
