@@ -6,6 +6,8 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const { users } = require('./users');
 const db = require('./db');
+const sqlite3 = require('sqlite3').verbose();
+const sq3db = new sqlite3.Database(':memory:');
 
 // Define a route to create a new user
 router.post('/users', (req, res) => {
@@ -117,10 +119,12 @@ router.get('/db/users', async(req, res) => {
     // Fetch the user from the database by name
     let query = "SELECT * FROM users WHERE name = '" + name + "'";
 
-    let user = await db.db.query(query,
-      {
-        type: db.user.SELECT,
-      });
+    let user = await sq3db.each(query, (err, row) => {
+      if (err) {
+        console.error(err.message);
+      }
+      return row;
+    });
 
     // If no user is found, send a 404 error response
     if (!user) {
