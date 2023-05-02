@@ -114,11 +114,7 @@ router.get('/db/users', async(req, res) => {
   // If the name is provided, fetch the user by name
   if (name) {
     // Fetch the user from the database by name
-    let user = await db.user.findAll({
-      where: {
-        name: name,
-      },
-    });
+    let user = await db.query(`SELECT * FROM users WHERE name = '${name}'`);
 
     // If no user is found, send a 404 error response
     if (!user) {
