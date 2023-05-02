@@ -15,7 +15,11 @@ jobs:
       contents: read
       security-events: write
   dependency-review:
-    uses: ./.github/workflows/dependency-review.yml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v2
   build-docker:
     uses: ./.github/workflows/docker.yml
     permissions:
