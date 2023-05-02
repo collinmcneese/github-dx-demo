@@ -18,7 +18,10 @@ const user = db.define('user', {
   emoji: Sequelize.STRING,
 });
 
+// Authenticate connection
 db.authenticate();
+
+// Sync database
 (async() => {
   await db.sync();
 })();
