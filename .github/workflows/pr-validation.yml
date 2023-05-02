@@ -8,13 +8,10 @@ on:
 jobs:
   ci-javascript:
     uses: ./.github/workflows/ci-js.yml
-    if: !startsWith(github.event.pull_request.title, 'docs:')
   CodeQL:
     uses: ./.github/workflows/codeql.yml
-    if: !startsWith(github.event.pull_request.title, 'docs:')
   dependency-review:
     uses: ./.github/workflows/dependency-review.yml
-    if: !startsWith(github.event.pull_request.title, 'docs:')
   build-docker:
     uses: ./.github/workflows/docker.yml
     needs:
