@@ -6,18 +6,22 @@ on:
   pull_request:
 
 jobs:
-  ci-javascript:
-    uses: ./.github/workflows/ci-js.yml
-  CodeQL:
-    uses: ./.github/workflows/codeql.yml
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
   dependency-review:
     uses: ./.github/workflows/dependency-review.yml
     permissions:
       contents: read
+  ci-javascript:
+    uses: ./.github/workflows/ci-js.yml
+    needs:
+      - dependency-review
+  CodeQL:
+    uses: ./.github/workflows/codeql.yml
+    needs:
+      - dependency-review
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
   build-docker:
     uses: ./.github/workflows/docker.yml
     permissions:
@@ -26,4 +30,3 @@ jobs:
     needs:
       - ci-javascript
       - CodeQL
-      - dependency-review
