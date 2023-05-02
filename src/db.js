@@ -4,12 +4,27 @@
 const Sequelize = require('sequelize');
 
 // Create connection to sqlite db
-const db_session = new Sequelize({
+const db = new Sequelize({
   dialect: 'sqlite',
   storage: 'users.sqlite',
 });
 
-const db = db_session.authenticate();
+const user = db.define('user', {
+  id: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  name: Sequelize.STRING,
+  emoji: Sequelize.STRING,
+});
+
+db.authenticate();
+(async() => {
+  await db.sync();
+})();
 
 // Export connection
-module.exports = db;
+module.exports = {
+  db,
+  user,
+};

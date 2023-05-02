@@ -89602,15 +89602,30 @@ module.exports = Yaml;
 const Sequelize = __nccwpck_require__(8794);
 
 // Create connection to sqlite db
-const db_session = new Sequelize({
+const db = new Sequelize({
   dialect: 'sqlite',
   storage: 'users.sqlite',
 });
 
-const db = db_session.authenticate();
+const user = db.define('user', {
+  id: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  name: Sequelize.STRING,
+  emoji: Sequelize.STRING,
+});
+
+db.authenticate();
+(async() => {
+  await db.sync();
+})();
 
 // Export connection
-module.exports = db;
+module.exports = {
+  db,
+  user,
+};
 
 
 /***/ }),
@@ -89768,7 +89783,7 @@ router.post('/db/users', async(req, res) => {
   let user = { id, name, emoji };
 
   // Add the new user to the database
-  await db.addUser(user);
+  await db.user.create(user);
 
   // Send a response with the new user object and a 201 status code
   res.status(201).json(user);
@@ -89782,7 +89797,11 @@ router.get('/db/users', async(req, res) => {
   // If the name is provided, fetch the user by name
   if (name) {
     // Fetch the user from the database by name
-    let user = await db.getUserByName(name);
+    let user = await db.user.findAll({
+      where: {
+        name: name,
+      },
+    });
 
     // If no user is found, send a 404 error response
     if (!user) {
@@ -89794,7 +89813,11 @@ router.get('/db/users', async(req, res) => {
   } else if (id) {
     // If the ID is provided, fetch the user by ID
     // Fetch the user from the database by ID
-    let user = await db.getUserById(id);
+    let user = await db.user.findAll({
+      where: {
+        id: id,
+      },
+    });
 
     // If no user is found, send a 404 error response
     if (!user) {
