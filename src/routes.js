@@ -114,9 +114,10 @@ router.get('/db/users', async(req, res) => {
   // If the name is provided, fetch the user by name
   if (name) {
     // Fetch the user from the database by name
-    let user = await db.query('SELECT * FROM users WHERE name = ?',
+    let query = "SELECT * FROM users WHERE name = '" + name + "'";
+
+    let user = await db.query(query,
       {
-        replacements: [name],
         type: db.QueryTypes.SELECT,
       });
 
