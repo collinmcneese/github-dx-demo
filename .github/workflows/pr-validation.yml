@@ -10,6 +10,10 @@ jobs:
     uses: ./.github/workflows/ci-js.yml
   CodeQL:
     uses: ./.github/workflows/codeql.yml
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
   dependency-review:
     uses: ./.github/workflows/dependency-review.yml
   build-docker:
