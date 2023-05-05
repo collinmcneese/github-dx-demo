@@ -51,6 +51,7 @@ async function indexPage() {
     </div>
   `;
 
+  // Build table of users from api/users
   let userTable = fetch(`http://localhost:${port}/api/users`)
     .then((response) => response.json())
     .then((data) => {
@@ -106,6 +107,7 @@ async function indexPage() {
       console.error('Error:', error);
     });
 
+  // close the html
   let contentEnd = `
   </div>
 
